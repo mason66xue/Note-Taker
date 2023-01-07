@@ -1,42 +1,53 @@
 const express =require('express');
 const path=require('path');
+
+//configuration for express
 const app=express();
-// const { clog } = require('./middleware/clog');
-// const api = require('./routes/index.js');
 
-const PORT =process.env.PORT || 3000;
+const PORT =process.env.PORT || 3001;
 
-// const fs=requier('fs');
-// app.use(clog);
-// init express 
 
-//set a static folder 
-app.use(express.static(path.join(__dirname, 'public')));
+//set up middleware 
+app.use((req, res, next)=> {
+  console.log(`${req.method} request received for endpoint ${req.url}`);
+  next();
+}
+)
 
-// Middleware for parsing JSON and urlencoded form data
+
+//static contents
+app.use(express.static('static'));
+
+//parser for incoming data 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/api', api);
 
-app.use(express.static('public'));
 
-// GET Route for homepage
+//Get 
+
 app.get('/', (req, res) =>
-  res.sendFile(path.join(__dirname, '/public/index.html'))
+  res.sendFile(path.join(__dirname, '/static/index.html'))
 );
 
-// GET Route for notes page
-app.get('/feedback', (req, res) =>
-  res.sendFile(path.join(__dirname, '/public/notes.html'))
-);
+
+
+app.get('/notes', (req,res) => {
+  console.log('GET /');
+  // res.send('GET / processed');
+  res.sendFile(path.join(__dirname, '/static/notes.html'));
+});
+
+
+
+
 
 // Wildcard route to direct users to a 404 page
 app.get('*', (req, res) =>
-  res.sendFile(path.join(__dirname, 'public/pages/404.html'))
+  res.sendFile(path.join(__dirname, 'static/404.html'))
 );
 
 
 //set up listner
-app.listen(PORT,()=> console.log('server started on port '))
+app.listen(PORT,()=> console.log('server starts'))
 
 
