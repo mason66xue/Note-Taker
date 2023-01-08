@@ -3,6 +3,12 @@ const { v4: uuidv4 } = require('uuid');
 const notes = require('../db/db.json');
 const path= require('path');
 const fs =require('fs');
+const {
+  readFromFile,
+  readAndAppend,
+  writeToFile,
+} = require('../helpers/fsUtils');
+
 
 
 const notes= require ('express').Router();
